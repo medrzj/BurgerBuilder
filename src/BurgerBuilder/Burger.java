@@ -12,7 +12,7 @@ public class Burger {
 		myPattyCount = 1; // default patty count
 		myIsBaronBurger = theWorks;
 		myBottomStack = new MyStack();
-		buildBurger();
+		buildBurger(); 
 	}
 	
 	private void buildBurger() {
