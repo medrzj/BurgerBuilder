@@ -50,7 +50,7 @@ public class MyStack<StackDataType> {
 	
 	/**
 	 * Inner class for creating the Node.
-	 * @author Charlie Grumer
+	 * @author Charlie Grumer, Jessica Medrzycki
 	 * @param <NodeDataType>  the generic type
 	 */
 	private class Node<NodeDataType> {
