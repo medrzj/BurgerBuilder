@@ -1,8 +1,16 @@
 package BurgerBuilder;
 
+/**
+ * Our stack ADT that uses a linked list. 
+ * 
+ * @author Charlie Grumer, Jessica Medrzycki
+ * @param <StackDataType>	the generic type
+ */
 public class MyStack<StackDataType> {
+	
 	private Node<StackDataType> myFirstNode;
 	private int myStackSize;
+	
 	
 	protected MyStack() {
 		myFirstNode = null;
