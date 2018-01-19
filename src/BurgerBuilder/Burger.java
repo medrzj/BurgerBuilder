@@ -436,6 +436,10 @@ public class Burger {
 		}
 	}
 	
+	/**
+	 * Removes the ingredient from the stack.
+	 * @param theType	the ingredient to remove.
+	 */
 	protected void removeIngredient(final String theType) {
 		
 	}

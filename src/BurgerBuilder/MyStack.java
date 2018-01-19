@@ -4,40 +4,63 @@ package BurgerBuilder;
  * Our stack ADT that uses a linked list. 
  * 
  * @author Charlie Grumer, Jessica Medrzycki
- * @param <StackDataType>	the generic type
+ * @param <Type>	the generic type
  */
-public class MyStack<StackDataType> {
+public class MyStack<Type> {
 	
-	private Node<StackDataType> myFirstNode;
+	private Node<Type> myFirstNode;
 	private int myStackSize;
 	
 	
+	/**
+	 * Constructs a stack.
+	 */
 	protected MyStack() {
 		myFirstNode = null;
 		myStackSize = 0;
 	}
 	
+	/**
+	 * Returns if the stack is empty or not.
+	 * @return	the state of the stack.
+	 */
 	protected boolean isEmpty() {
 		return myFirstNode == null;
 	}
 	
-	protected void push(final StackDataType theData) {
-		myFirstNode = new Node<StackDataType>(theData, myFirstNode);
+	/**
+	 * Adds the element to the top of the stack.
+	 * @param item	the item being added. 
+	 */
+	protected void push(final Type item) {
+		myFirstNode = new Node<Type>(item, myFirstNode);
 		myStackSize++; // increases saved stack size by 1
 
 	}
 	
-	protected StackDataType pop() {
-		final StackDataType result = myFirstNode.getNodeData(); // saves first node data
+	/**
+	 * Removes the top element on the stack. 
+	 * @return	the element just removed.
+	 */
+	protected Type pop() {
+		final Type result = myFirstNode.getNodeData(); // saves first node data
 		myFirstNode = myFirstNode.getNextNode(); // sets myFirstNode to point at the next node
 		myStackSize--; // decreases saved stack size by 1
 		return result; // returns saved first node data
 	}
 	
-	protected StackDataType peek() {
+	/**
+	 * View the top element in the stack.
+	 * @return	the top element.
+	 */
+	protected Type peek() {
 		return myFirstNode.getNodeData();
 	}
 	
+	/**
+	 * Returns the size of the stack.
+	 * @return	the stack size.
+	 */
 	protected int size() {
 		return myStackSize;
 	}
@@ -45,7 +68,7 @@ public class MyStack<StackDataType> {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
-		Node<StackDataType> node = myFirstNode;
+		Node<Type> node = myFirstNode;
 		while (node != null) {
 			sb.append(node.toString());
 			sb.append(", ");
@@ -90,10 +113,17 @@ public class MyStack<StackDataType> {
 			this(null, null);
 		}
 		
+		/**
+		 * Returns the next node. 
+		 * @return
+		 */
 		protected Node<NodeDataType> getNextNode() {
 			return myNext;
 		}
 		
+		/**
+		 * Returns the data in the Node.
+		 */
 		protected NodeDataType getNodeData() {
 			return myData;
 		}
