@@ -7,7 +7,7 @@ public class Main {
 		FileReader inputStream = null;
 		
 		try {
-				inputStream = new FileReader("customer.txt");
+				inputStream = new FileReader("resources/customer.txt");
 				BufferedReader bufferedStream = new BufferedReader(inputStream);
 				String line;
 				int count = 0;

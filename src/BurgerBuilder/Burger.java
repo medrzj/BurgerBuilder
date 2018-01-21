@@ -444,7 +444,28 @@ public class Burger {
 		
 	}
 	
+	/**
+	 * Helper method that combines the two stacks to make the one
+	 * burger stack for printing. 
+	 * @return	the entire burger stack
+	 */
+	protected MyStack combineStacks() {
+		MyStack tempTop = new MyStack<String>();
+		MyStack tempBottom = new MyStack<String>();
+		while (!myTopStack.isEmpty()) {
+			myBottomStack.push(myTopStack.pop());
+		}
+		return myBottomStack;
+	}
+	
+	/**
+	 * 
+	 */
 	public String toString() {
-		return new String();
+		final StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		sb.append(combineStacks().toString());
+		sb.append("]");
+		return sb.toString();
 	}
 }
