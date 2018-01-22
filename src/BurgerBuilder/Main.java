@@ -1,6 +1,13 @@
 package BurgerBuilder;
 import java.io.*;
 
+/**
+ * Main method for the string output of the Burger's ingredients.
+ * @author Charlie Grumer, Jessica Medrzycki
+ * @version	January 20, 2018
+ * Code based off of Main.java given by Kayee
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) throws IOException {
@@ -40,7 +47,7 @@ public class Main {
 		
 		boolean baronBurger = words[0].equals("Baron") || words[Math.min(1, words.length-1)].equals("Baron") || words[Math.min(2, words.length-1)].equals("Baron");
 		burger = new Burger(baronBurger);
-//		System.out.println(baronBurger);
+		
 		if(words[0].equals("Double"))
 			burger.addPatty();
 		if(words[0].equals("Triple")){
