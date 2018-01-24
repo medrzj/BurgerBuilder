@@ -26,16 +26,15 @@ public class Main {
 				}
 					bufferedStream.close();
 		} finally {}
-	
-//		testParse();		
+		
 	}
 	
-	public static void testParse() {
-		parseLine("Burger");
-		parseLine("Baron Burger");
-		parseLine("Double Chicken Burger with Cheese Ketchup");
-		parseLine("Triple Veggie Baron Burger with no Veggies Mustard but Onions");
-	}
+//	public static void testParse() {
+//		parseLine("Burger");
+//		parseLine("Baron Burger");
+//		parseLine("Double Chicken Burger with Cheese Ketchup");
+//		parseLine("Triple Veggie Baron Burger with no Veggies Mustard but Onions");
+//	}
 	
 	public static void parseLine(String line) {
 		String[] words = line.split(" ");

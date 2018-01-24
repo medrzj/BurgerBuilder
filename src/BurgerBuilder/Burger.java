@@ -4,7 +4,7 @@ package BurgerBuilder;
  * Constructs the burger with the correct order of ingredients. 
  * 
  * @author Charlie Grumer, Jessica Medrzycki
- * @version January 20, 2018
+ * @version January 22, 2018
  *
  */
 public class Burger {
@@ -13,8 +13,8 @@ public class Burger {
 	
 	private int myPattyCount;
 	private boolean myIsBaronBurger;
-	private final MyStack<String> myBottomStack; // top is cheese
-	private final MyStack<String> myTopStack; // top is additional patties
+	private final MyStack<String> myBottomStack; // top is cheese (or first patty)
+	private final MyStack<String> myTopStack; // top is additional patties (if applicable)
 	private String myPattyType;
 	
 	/**
@@ -44,9 +44,9 @@ public class Burger {
 			myBottomStack.push("Mustard");
 			myBottomStack.push("Mushrooms");
 			myBottomStack.push(myPattyType);
-			myBottomStack.push("Pepperjack");
-			myBottomStack.push("Mozzarella");
 			myBottomStack.push("Cheddar");
+			myBottomStack.push("Mozzarella");
+			myBottomStack.push("Pepperjack");
 			
 			myTopStack.push("Pickle");
 			myTopStack.push("Bun");
@@ -75,21 +75,29 @@ public class Burger {
 		//update current patty type
 		myPattyType = thePattyType;
 		
-		
 		if (myPattyCount > 1) {
 			while(myTopStack.peek().equals(oldPatty)) {
 				myTopStack.pop();
 			}
 			//can happen 1 or 2 times since max patty amount on
 			// top stack is 2
-			for (int i = 0; i < myPattyCount-1; i++) {
+			for (int i = 0; i < myPattyCount - 1; i++) {
 				myTopStack.push(thePattyType);
 			}
 		} 
-		
+		final MyStack<String> temp = new MyStack<>();
+		// remove and store possible cheeses
+		while (!myBottomStack.peek().equals(oldPatty)) {
+			temp.push(myBottomStack.pop());
+		}
+		// remove old patty
 		myBottomStack.pop();
+		// add new patty
 		myBottomStack.push(thePattyType);
-		
+		// if cheeses were removed put them back
+		if (!temp.isEmpty()) {
+			refillStack(myBottomStack, temp);
+		}
 	}
 	
 	/**
@@ -127,6 +135,7 @@ public class Burger {
 				myBottomStack.push("Mozarella");
 				myBottomStack.push("Pepperjack");
 				break;
+		
 			case("Sauce"):
 				current = myTopStack.peek();
 			
@@ -139,10 +148,7 @@ public class Burger {
 				myTopStack.push("Baron-Sauce");
 				
 				//move the ingredients back on the stack
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
-				
+				refillStack(myTopStack, temp);
 				
 				current = myBottomStack.peek();
 				//loop to get to the bottom bun
@@ -154,9 +160,7 @@ public class Burger {
 				myBottomStack.push("Mustard");
 				
 				//move the ingredients back on the stack
-				while (!temp.isEmpty()) {
-					myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 				
 				break;
 			
@@ -181,9 +185,7 @@ public class Burger {
 				myTopStack.push("Onions");
 				
 				//move the ingredients back on the stack
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
 			
 			
 				current = myBottomStack.peek();
@@ -196,9 +198,7 @@ public class Burger {
 				myBottomStack.push("Mushrooms");
 			
 				//move the ingredients back on the stack
-				while (!temp.isEmpty()) {
-				myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 			
 				break;
 			
@@ -235,9 +235,7 @@ public class Burger {
 						temp.push(myBottomStack.pop());
 					}
 				}
-				while (!temp.isEmpty()) {
-					myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 		
 				while(!myTopStack.isEmpty()) {
 					current = myTopStack.peek();
@@ -247,9 +245,7 @@ public class Burger {
 						temp.push(myTopStack.pop());
 					}
 				}
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
 				break;
 				
 			case("Veggies"): 
@@ -261,9 +257,7 @@ public class Burger {
 						temp.push(myBottomStack.pop());
 					}
 				}
-				while (!temp.isEmpty()) {
-					myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 		
 				while(!myTopStack.isEmpty()) {
 					current = myTopStack.peek();
@@ -275,9 +269,8 @@ public class Burger {
 						temp.push(myTopStack.pop());
 					}
 				}
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 
 			default:
@@ -302,9 +295,8 @@ public class Burger {
 					temp.push(myBottomStack.pop());
 				}
 				myBottomStack.push("Ketchup");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 				
 			case("Mustard"):
@@ -313,9 +305,8 @@ public class Burger {
 					temp.push(myBottomStack.pop());
 				}
 				myBottomStack.push("Mustard");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				
 				break;
 			case("Mushrooms"):
@@ -326,9 +317,7 @@ public class Burger {
 					temp.push(myBottomStack.pop());
 				}
 				myBottomStack.push("Mushrooms");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 				break;
 			case("Cheddar"):
 				current = myBottomStack.peek();
@@ -338,9 +327,7 @@ public class Burger {
 					temp.push(myBottomStack.pop());
 				}
 				myBottomStack.push("Mozarella");
-				while (!temp.isEmpty()) {
-					myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 				break;
 				
 			case("Mozarella"):
@@ -352,9 +339,7 @@ public class Burger {
 					temp.push(myBottomStack.pop());
 				}
 				myBottomStack.push("Mozarella");
-				while (!temp.isEmpty()) {
-					myBottomStack.push(temp.pop());
-				}
+				refillStack(myBottomStack, temp);
 				break;
 				
 			case("Pepperjack"):
@@ -373,9 +358,8 @@ public class Burger {
 						temp.push(myTopStack.pop());
 					}
 					myTopStack.push("Onions");
-					while (!temp.isEmpty()) {
-						myTopStack.push(temp.pop());
-					}
+					refillStack(myTopStack, temp);
+
 				}
 				break;
 			case("Tomato"):
@@ -385,9 +369,8 @@ public class Burger {
 					temp.push(myTopStack.pop());
 				}
 				myTopStack.push("Tomato");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 			case("Lettuce"):
 				current = myTopStack.peek();
@@ -396,9 +379,8 @@ public class Burger {
 					temp.push(myTopStack.pop());
 				}
 				myTopStack.push("Lettuce");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 			case("Baron-Sauce"):
 				current = myTopStack.peek();
@@ -406,9 +388,8 @@ public class Burger {
 					temp.push(myTopStack.pop());
 				}
 				myTopStack.push("Baron-Sauce");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 				
 			case("Mayonnaise"):
@@ -417,9 +398,8 @@ public class Burger {
 					temp.push(myTopStack.pop());
 				}
 				myTopStack.push("Mayonnaise");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 			
 			case("Pickle"):
@@ -427,9 +407,8 @@ public class Burger {
 					temp.push(myTopStack.pop());
 				}
 				myTopStack.push("Pickle");
-				while (!temp.isEmpty()) {
-					myTopStack.push(temp.pop());
-				}
+				refillStack(myTopStack, temp);
+
 				break;
 			default:
 				break;
@@ -441,9 +420,152 @@ public class Burger {
 	 * @param theType	the ingredient to remove.
 	 */
 	protected void removeIngredient(final String theType) {
+		String current;
+		final MyStack<String> temp = new MyStack<>();
+
+		switch (theType) {
 		
+			case("Ketchup"):
+				current = myBottomStack.peek();
+				while(!current.equals("Ketchup") && !current.equals("Bun")) {
+					temp.push(myBottomStack.pop());
+				}
+				if(current.equals("Ketchup")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Mustard"):
+				current = myBottomStack.peek();
+				while(!current.equals("Ketchup") && !current.equals("Bun") && !current.equals("Mustard")) {
+					temp.push(myBottomStack.pop());
+				}
+				if(!current.equals("Mustard")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Mushrooms"):
+				current = myBottomStack.peek();
+				while(!current.equals("Ketchup") && !current.equals("Bun") && !current.equals("Mustard") && !current.equals("Mushrooms")) {
+					temp.push(myBottomStack.pop());
+				}
+				if(!current.equals("Mushrooms")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Cheddar"):
+				current = myBottomStack.peek();
+				// There is ALWAYS a patty of some sort
+				while(!current.equals("Cheddar") && !current.equals(myPattyType)) {
+					temp.push(myBottomStack.pop());
+				}
+				if(!current.equals("Cheddar")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Mozarella"):
+				current = myBottomStack.peek();
+				// There is ALWAYS a patty of some sort -- no need to check beyond
+				while(!current.equals("Mozarella") && !current.equals("Cheddar") && !current.equals(myPattyType)) {
+					temp.push(myBottomStack.pop());
+				}
+				if(!current.equals("Mozarella")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Pepperjack"):
+				current = myBottomStack.peek();
+				// There is ALWAYS a patty of some sort -- no need to check beyond
+				while(!current.equals("Pepperjack") && !current.equals("Mozarella") && !current.equals("Cheddar") && !current.equals(myPattyType)) {
+					temp.push(myBottomStack.pop());
+				}
+				if(!current.equals("Pepperjack")) {
+					myBottomStack.pop();
+				}
+				refillStack(myBottomStack, temp);
+				break;
+				
+			case("Onions"):
+				current = myTopStack.peek();
+				while(!current.equals("Bun") && !current.equals("Mayonnaise") && !current.equals("Baron-Sauce") && !current.equals("Lettuce") && !current.equals("Onions") && !current.equals("Tomato")) {
+					temp.push(myTopStack.pop());
+				}
+				if(current.equals("Onions")) {
+					myTopStack.pop();
+				}
+				refillStack(myTopStack, temp);
+				break;
+				
+			case("Tomato"):
+				current = myTopStack.peek();
+				while(!current.equals("Bun") && !current.equals("Mayonnaise") && !current.equals("Baron-Sauce") && !current.equals("Lettuce") && !current.equals("Tomato")) {
+					temp.push(myTopStack.pop());
+				}
+				if(current.equals("Tomato")) {
+					myTopStack.pop();
+				}
+				refillStack(myTopStack, temp);
+				break;
+				
+			case("Lettuce"):
+				current = myTopStack.peek();
+				while(!current.equals("Bun") && !current.equals("Mayonnaise") && !current.equals("Baron-Sauce") && !current.equals("Lettuce")) {
+					temp.push(myTopStack.pop());
+				}
+				if(current.equals("Lettuce")) {
+					myTopStack.pop();
+				}
+				refillStack(myTopStack, temp);
+				break;
+				
+			case("Baron-Sauce"):
+				current = myTopStack.peek();
+				while(!current.equals("Bun") && !current.equals("Mayonnaise") && !current.equals("Baron-Sauce")) {
+					temp.push(myTopStack.pop());
+				}
+				if(current.equals("Baron-Sauce")) {
+					myTopStack.pop();
+				}
+				refillStack(myTopStack, temp);
+				break;
+				
+			case("Mayonnaise"):
+				current = myTopStack.peek();
+				while(!current.equals("Bun") && !current.equals("Mayonnaise")) {
+					temp.push(myTopStack.pop());
+				}
+				if(current.equals("Mayonnaise")) {
+					myTopStack.pop();
+				}
+				refillStack(myTopStack, temp);
+				break;
+
+			case("Pickle"): 			
+				current = myTopStack.peek();
+				if(current.equals("Pickle")) {
+					myTopStack.pop();
+				}
+				break;
+			
+			default:
+				break;
+		}
 	}
 	
+	private void refillStack(final MyStack<String> theToFill, final MyStack<String> theFilled) {
+		while(!theFilled.isEmpty()) {
+			theToFill.push(theFilled.pop());
+		}
+	}
 	/**
 	 * Helper method that combines the two stacks to make the one
 	 * burger stack for printing. 
@@ -458,9 +580,6 @@ public class Burger {
 		return myBottomStack;
 	}
 	
-	/**
-	 * 
-	 */
 	public String toString() {
 		final StringBuilder sb = new StringBuilder();
 		sb.append("[");
